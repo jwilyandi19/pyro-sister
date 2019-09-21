@@ -19,6 +19,16 @@ class FileSystemServer(object):
                 f.write(content)
             return "File {} has been uploaded".format(file_name)
 
+    def readFile(self, file_name):
+        path = "file_system/{}".format(file_name)
+
+        if not os.path.exists(path):
+            return "File {} is not exist".format(file_name)
+        else:
+            with open(path) as f:
+                content = f.read()
+                return content
+
 
 if __name__ == '__main__':
     k = FileSystemServer()
