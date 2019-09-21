@@ -1,7 +1,7 @@
 import random
 
 
-class GreetServer(object):
+class FileSystemServer(object):
     def __init__(self):
         pass
 
@@ -11,5 +11,5 @@ class GreetServer(object):
 
 
 if __name__ == '__main__':
-    k = GreetServer()
+    k = FileSystemServer()
     print(k.get_greet('royyana'))
