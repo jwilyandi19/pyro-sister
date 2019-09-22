@@ -20,6 +20,7 @@ class FileSystemServer(object):
             return "File {} has been uploaded".format(file_name)
 
     def readFile(self, file_name):
+        print("Reading {}...".format(file_name))
         path = "file_system/{}".format(file_name)
 
         if not os.path.exists(path):
@@ -39,6 +40,26 @@ class FileSystemServer(object):
             with open(path, "w+") as f:
                 f.write(content)
             return "File {} has been updated".format(file_name)
+
+    def deleteFile(self, file_name):
+        print("Deleting {}...".format(file_name))
+        path = "file_system/{}".format(file_name)
+
+        if not os.path.exists(path):
+            return "File {} is not exist".format(file_name)
+        else:
+            os.remove(path)
+            return "File {} has been deleted".format(file_name)
+
+    def listFile(self):
+        print("Listing...")
+        path = "file_system/"
+
+        files = []
+        for root,dirs,files in os.walk(path):
+            return files
+
+
 
 
 if __name__ == '__main__':
