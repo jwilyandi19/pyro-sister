@@ -29,6 +29,17 @@ class FileSystemServer(object):
                 content = f.read()
                 return content
 
+    def updateFile(self, content, file_name):
+        print("Updating {}...".format(file_name))
+        path = "file_system/{}".format(file_name)
+
+        if not os.path.exists(path):
+            return "File {} is not exist".format(file_name)
+        else:
+            with open(path, "w+") as f:
+                f.write(content)
+            return "File {} has been updated".format(file_name)
+
 
 if __name__ == '__main__':
     k = FileSystemServer()

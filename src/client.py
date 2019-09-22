@@ -16,6 +16,11 @@ def upload_file(file_name, srvr):
 def read_file(file_name, srvr):
     return srvr.readFile(file_name)
 
+def update_file(file_name, srvr):
+    with open(file_name) as f:
+        content = f.read()
+        return srvr.updateFile(content, file_name)
+
 
 if __name__=='__main__':
     server = start_server()
@@ -23,6 +28,7 @@ if __name__=='__main__':
     print("Menu list:")
     print("1. Upload file: UPLOAD <file_name>")
     print("2. Read File: READ <file_name>")
+    print("3. Update File: UPDATE <file_name>")
 
     while True:
         query = input("\n>> ")
@@ -34,5 +40,9 @@ if __name__=='__main__':
         elif query1[0] == 'READ':
             res = read_file(query1[1],server)
             print(res)
+        elif query1[0] == 'UPDATE':
+            res = update_file(query1[1], server)
+            print(res)
+
 
 
