@@ -1,4 +1,4 @@
-import Pyro4
+import Pyro4, Pyro4.errors
 
 def start_server():
     uri = "PYRONAME:filesystemserver@localhost:7777"
@@ -43,32 +43,37 @@ if __name__=='__main__':
     print("5. List File: LIST")
     print("6. Exit program: EXIT")
     running = True
-
     while running:
-        query = input("\n>> ")
-        query1 = query.split()
-
-        if query1[0] == 'UPLOAD':
-            res = upload_file(query1[1], server)
-            print(res)
-        elif query1[0] == 'READ':
-            res = read_file(query1[1],server)
-            print(res)
-        elif query1[0] == 'UPDATE':
-            res = update_file(query1[1], server)
-            print(res)
-        elif query1[0] == 'DELETE':
-            res = delete_file(query1[1], server)
-            print(res)
-        elif query1[0] == 'LIST':
-            files = list_file(server)
-            for filename in files:
-                print(filename)
-        elif query1[0] == 'EXIT':
+        try:
+            query = input("\n>> ")
+            query1 = query.split()
+            if query1[0] == 'UPLOAD':
+                res = upload_file(query1[1], server)
+                print(res)
+            elif query1[0] == 'READ':
+                res = read_file(query1[1],server)
+                print(res)
+            elif query1[0] == 'UPDATE':
+                res = update_file(query1[1], server)
+                print(res)
+            elif query1[0] == 'DELETE':
+                res = delete_file(query1[1], server)
+                print(res)
+            elif query1[0] == 'LIST':
+                files = list_file(server)
+                for filename in files:
+                    print(filename)
+            elif query1[0] == 'EXIT':
+                print("Exiting...")
+                running = False
+            else:
+                print("Query does not exist. Please try listed query")
+        except (Pyro4.errors.TimeoutError, Pyro4.errors.ConnectionClosedError):
+            print("Server Timeout. Exiting...")
+            running = False
+        except KeyboardInterrupt:
             print("Exiting...")
             running = False
-        else:
-            print("Query does not exist. Please try listed query")
 
 
 
