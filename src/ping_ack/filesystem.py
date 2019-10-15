@@ -1,9 +1,14 @@
 import random
 import os
+import time
 
 class FileSystemServer(object):
     def __init__(self):
         pass
+
+    def ack(self):
+        time.sleep(1.0)
+        return "I'm alive"
 
     def get_greet(self, name='NoName'):
         lucky_number = random.randint(1, 100000)

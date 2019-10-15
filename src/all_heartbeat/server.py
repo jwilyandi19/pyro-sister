@@ -1,6 +1,7 @@
 from src.all_heartbeat.filesystem import  *
 import Pyro4
 
+Pyro4.config.COMMTIMEOUT = 2.0
 def start():
     #name server harus di start dulu dengan  pyro4-ns -n localhost -p 7777
     #gunakan URI untuk referensi name server yang akan digunakan

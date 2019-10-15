@@ -1,8 +1,11 @@
 import Pyro4, Pyro4.errors
+import sys
 
 def start_server():
     uri = "PYRONAME:filesystemserver@localhost:7777"
+
     fileServer = Pyro4.Proxy(uri)
+    fileServer._pyroTimeout = 3.0
     return fileServer
 
 #untuk UPLOAD
@@ -27,12 +30,17 @@ def delete_file(file_name, srvr):
 
 #untuk LIST
 def list_file(srvr):
-    print(srvr)
     return srvr.listFile()
 
 
 if __name__=='__main__':
     server = start_server()
+
+    try:
+        server.ack()
+    except  Pyro4.errors.TimeoutError:
+        print("Server Timeout. Exiting...")
+        sys.exit()
 
     print("Simple file system. Only for file upload purpose. ")
     print("Menu list:")
@@ -45,6 +53,7 @@ if __name__=='__main__':
     running = True
     while running:
         try:
+            server.ack()
             query = input("\n>> ")
             query1 = query.split()
             if query1[0] == 'UPLOAD':
@@ -68,8 +77,11 @@ if __name__=='__main__':
                 running = False
             else:
                 print("Query does not exist. Please try listed query")
-        except (Pyro4.errors.TimeoutError, Pyro4.errors.ConnectionClosedError):
+        except Pyro4.errors.TimeoutError:
             print("Server Timeout. Exiting...")
+            running = False
+        except  Pyro4.errors.ConnectionClosedError:
+            print("Connection error. Exiting...")
             running = False
         except KeyboardInterrupt:
             print("Exiting...")

@@ -1,5 +1,6 @@
 import random
 import os
+import time
 
 class FileSystemServer(object):
     def __init__(self):
@@ -55,6 +56,7 @@ class FileSystemServer(object):
             return "File {} has been deleted".format(file_name)
 
     def listFile(self):
+        time.sleep(3.0)
         print("Listing...")
         path = "file_system/"
 
