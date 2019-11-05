@@ -1,9 +1,30 @@
 import os
 import base64
+import Pyro4
 
 class FileServer(object):
     def __init__(self):
-        pass
+        self.instance = None
+        self.instanceservers = dict()
+        self.instancelist = ['fileserver1','fileserver2','fileserver3']
+
+    def setinstance(self, instance):
+        self.instance = instance
+
+    def setservers(self):
+        i = 0
+        for instancename in self.instancelist:
+            if self.instance == instancename:
+                pass
+            else:
+                self.instanceservers[i] = Pyro4.Proxy("PYRONAME:{}@localhost:7777" . format(instancename))
+                i += 1
+
+    def getservers(self):
+        return self.instanceservers
+
+    def getinstance(self):
+        return self.instance
 
     def create_return_message(self,kode='000',message='kosong',data=None):
         return dict(kode=kode,message=message,data=data)

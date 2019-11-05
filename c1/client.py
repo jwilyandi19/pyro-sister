@@ -4,37 +4,29 @@ import json
 import sys
 import os
 
-namainstance = sys.argv[1]
-
-def get_fileserver_objects():
-    uri = []
-    fserver = []
-    print("CHECK")
-    for i in range(0,3):
-        uri.append("PYRONAME:{}@localhost:7777" . format("fileserver" + str(i+1)))
-        fserver.append(Pyro4.Proxy(uri[i]))
-
-    return fserver
+if len(sys.argv) > 1:
+    namainstance = sys.argv[1]
+else:
+    namainstance = "fileserver1"
 
 def get_fileserver_object():
     uri = "PYRONAME:{}@localhost:7777" . format(namainstance)
     fserver = Pyro4.Proxy(uri)
+    fserver.setinstance(namainstance)
+    fserver.setservers()
     return fserver
 
-def create(file_name,fss):
+def create(file_name,f):
     print("File {} has been created".format(file_name))
-    for fs in fss:
-        fs.create(file_name)
+    f.create(file_name)
 
-def update(file_name,fss):
+def update(file_name,f):
     print("File {} has been updated".format(file_name))
-    for fs in fss:
-        fs.update(file_name,content = open(file_name,'rb+').read())
+    f.update(file_name,content=open(file_name,'rb+').read())
 
 def delete(file_name,fss):
     print("File {} has been deleted".format(file_name))
-    for fs in fss:
-        fs.delete(file_name)
+    f.delete(file_name)
 
 def read(file_name,f):
     return f.read(file_name)
@@ -42,9 +34,9 @@ def read(file_name,f):
 
 
 if __name__=='__main__':
-    fss = get_fileserver_objects()
     f = get_fileserver_object()
 
+    print("SERVER: server")
     print("UPLOAD: upload <file_name>")
     print("DOWNLOAD: download <file_name>")
     print("DELETE: delete <file_name>")
@@ -57,12 +49,14 @@ if __name__=='__main__':
         query = input(">>")
         query_input = query.split()
 
-        if(query_input[0]=="upload"):
-            create(query_input[1],fss)
-            update(query_input[1],fss)
+        if(query_input[0]=="server"):
+            print(f.getservers())
+        elif(query_input[0]=="upload"):
+            create(query_input[1],f)
+            update(query_input[1],f)
 
         elif(query_input[0]=="delete"):
-            delete(query_input[1],fss)
+            delete(query_input[1],f)
 
         elif(query_input[0]=="download"):
             con = read(query_input[1],f)
